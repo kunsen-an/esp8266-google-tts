@@ -149,6 +149,14 @@ String GoogleTTS::getTKK() {
     String tkkFunc = "";
     char ch;
     do {
+      if (timeout < millis()) {
+        m_pClient->stop();
+        if (bClientCreated == true) {
+          delete m_pClient;
+          m_pClient = nullptr;
+        }
+        return "_TIMEOUT";
+      }
       tkkFunc = "";
       m_pClient->readBytes(&ch, 1);
       if (ch != 't') continue;
